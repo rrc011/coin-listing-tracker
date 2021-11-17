@@ -1,4 +1,4 @@
-const playwright = require("playwright");
+const { chromium } = require("playwright-chromium");
 const nodemailer = require("nodemailer");
 
 const URL = "https://www.binance.com/en/support/announcement/c-48?navId=48";
@@ -77,7 +77,7 @@ const sendEmail = async (email, subject, newCoins) => {
 };
 
 (async () => {
-  const browser = await playwright["chromium"].launch({ headless: true });
+  const browser = await chromium.launch({ chromiumSandbox: false });
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto(URL);
