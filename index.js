@@ -104,9 +104,8 @@ const sendEmail = async (email, subject, newCoins) => {
 
   await saveObjectsToJsonFile(listToSave, FILE_NAME);
 
-  //send email
   if (newItems.length > 0) {
-    console.log("New items found");
+    console.log("New items found!!!");
     await sendEmail(MAIL_USER, "New coins added to Binance", newItems);
   } else console.log("No new coins added to Binance");
 
