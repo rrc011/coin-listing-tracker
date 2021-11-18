@@ -1,43 +1,13 @@
 const { chromium } = require("playwright-chromium");
 const nodemailer = require("nodemailer");
 const axios = require("axios");
+const mongo = require("mongodb").MongoClient;
 
 const URL = "https://www.binance.com/en/support/announcement/c-48?navId=48";
 
-const FILE_NAME = "binance.json";
-
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASS = process.env.MAIL_PASS;
-
-//function to save objects to json file
-const saveObjectsToJsonFile = async (objects, fileName) => {
-  const fs = require("fs");
-  const path = require("path");
-  const filePath = path.join(__dirname, fileName);
-  await fs.writeFile(filePath, JSON.stringify(objects), function (err) {
-    if (err) {
-      return console.log(err);
-    }
-    console.log("The file was saved!");
-  });
-};
-
-//function to get json file
-const getJsonFile = async (fileName) => {
-  const fs = require("fs");
-  const path = require("path");
-  const filePath = path.join(__dirname, fileName);
-  console.log(filePath);
-  console.log("Exist File: " + fs.existsSync(filePath));
-  const data = fs.readFileSync(filePath, "utf8");
-  return JSON.parse(data);
-  // if (fs.existsSync(filePath)) {
-  //   const data = fs.readFileSync(filePath, "utf8");
-  //   return JSON.parse(data);
-  // } else {
-  //   return [];
-  // }
-};
+const MONGO_CONNECTION_STRING = MONGO_CONNECTION_STRING;
 
 //function to return new item from two arrays
 const getNewItem = (array1, array2) => {
@@ -91,15 +61,35 @@ const sendPushNotification = async (newCoins) => {
   });
 };
 
+const saveCoinsToMongo = async (coins) => {
+  const client = await mongo.connect(MONGO_CONNECTION_STRING, {
+    useNewUrlParser: true,
+  });
+  const db = client.db("new-coin-listing");
+  const collection = db.collection("coins");
+  await collection.insertMany(coins);
+  console.log("coins saved to mongo");
+  client.close();
+};
+
+const getCoinsFromMongo = async () => {
+  const client = await mongo.connect(MONGO_CONNECTION_STRING, {
+    useNewUrlParser: true,
+  });
+  const db = client.db("new-coin-listing");
+  const collection = db.collection("coins");
+  const coins = await collection.find({}).toArray();
+  client.close();
+  return coins;
+};
+
 (async () => {
   const browser = await chromium.launch({ chromiumSandbox: false });
   const context = await browser.newContext();
   const page = await context.newPage();
   await page.goto(URL);
 
-  const jsonFile = await getJsonFile(FILE_NAME);
-
-  console.log({ jsonFile });
+  const coinsSaved = await getCoinsFromMongo();
 
   const links = await page.$$("a:Text('Binance Will List')");
   let listToSave = [];
@@ -114,16 +104,16 @@ const sendPushNotification = async (newCoins) => {
     listToSave.push({ hrefValue, textValue });
   }
 
-  const newItems = getNewItem(listToSave, jsonFile);
+  const newItems = getNewItem(listToSave, coinsSaved);
 
   console.log({ newItems });
 
-  await saveObjectsToJsonFile(listToSave, FILE_NAME);
+  if (newItems.length > 0) await saveCoinsToMongo(newItems);
 
   if (newItems.length > 0) {
     console.log("New items found!!!");
     await sendEmail(MAIL_USER, "New coins added to Binance", newItems);
-    // await sendPushNotification(newItems);
+    await sendPushNotification(newItems);
   } else console.log("No new coins added to Binance");
 
   await browser.close();
