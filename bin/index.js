@@ -1,5 +1,6 @@
 const { chromium } = require("playwright-chromium");
 const nodemailer = require("nodemailer");
+const axios = require("axios");
 
 const URL = "https://www.binance.com/en/support/announcement/c-48?navId=48";
 
@@ -26,6 +27,7 @@ const getJsonFile = async (fileName) => {
   const fs = require("fs");
   const path = require("path");
   const filePath = path.join(__dirname, fileName);
+  console.log(filePath);
   if (fs.existsSync(filePath)) {
     const data = fs.readFileSync(filePath, "utf8");
     return JSON.parse(data);
@@ -76,6 +78,16 @@ const sendEmail = async (email, subject, newCoins) => {
   });
 };
 
+const sendPushNotification = async (newCoins) => {
+  let url = `https://www.pushsafer.com/api?k=1sx8b3BnfMzsM6LiLIYA&s=11&v=1&t=New%20coins%20added%20to%20Binance&m=${newCoins
+    .map((coin) => `${coin.textValue}`)
+    .join("\n")}`;
+
+  axios.get(url, (res) => {
+    console.log(res);
+  });
+};
+
 (async () => {
   const browser = await chromium.launch({ chromiumSandbox: false });
   const context = await browser.newContext();
@@ -108,6 +120,7 @@ const sendEmail = async (email, subject, newCoins) => {
   if (newItems.length > 0) {
     console.log("New items found!!!");
     await sendEmail(MAIL_USER, "New coins added to Binance", newItems);
+    // await sendPushNotification(newItems);
   } else console.log("No new coins added to Binance");
 
   await browser.close();
