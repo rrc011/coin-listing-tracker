@@ -37,7 +37,7 @@ npm run start
 
 ## Deployment
 
-> Example to deply in [Heroku](https://www.heroku.com/)
+> Example to deploy in [Heroku](https://www.heroku.com/)
 
 - First, create a new app on heroku
 - Add the environment variables that were declared in the index file in the heroku app
