@@ -1,7 +1,7 @@
 {
   "name": "coin-listing-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "Project to notify the new currencies listed in binance",
   "main": "index.js",
   "scripts": {
     "start": "node bin/index.js",
@@ -11,8 +11,8 @@
     "node": "12.18.*",
     "npm": "6.14.*"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Rafael Rodriguez",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.24.0",
     "mongodb": "^4.2.0",

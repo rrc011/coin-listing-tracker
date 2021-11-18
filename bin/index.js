@@ -8,6 +8,7 @@ const URL = "https://www.binance.com/en/support/announcement/c-48?navId=48";
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASS = process.env.MAIL_PASS;
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
+const URL_PUSHSAFER = process.env.URL_PUSHSAFER;
 
 //function to return new item from two arrays
 const getNewItem = (array1, array2) => {
@@ -52,7 +53,7 @@ const sendEmail = async (email, subject, newCoins) => {
 };
 
 const sendPushNotification = async (newCoins) => {
-  let url = `https://www.pushsafer.com/api?k=1sx8b3BnfMzsM6LiLIYA&s=11&v=1&t=New%20coins%20added%20to%20Binance&m=${newCoins
+  let url = `${URL_PUSHSAFER}${newCoins
     .map((coin) => `${coin.textValue}`)
     .join("\n")}`;
 
