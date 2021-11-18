@@ -84,6 +84,8 @@ const sendEmail = async (email, subject, newCoins) => {
 
   const jsonFile = await getJsonFile(FILE_NAME);
 
+  console.log({ jsonFile });
+
   const links = await page.$$("a:Text('Binance Will List')");
   let listToSave = [];
 
@@ -98,6 +100,8 @@ const sendEmail = async (email, subject, newCoins) => {
   }
 
   const newItems = getNewItem(listToSave, jsonFile);
+
+  console.log({ newItems });
 
   await saveObjectsToJsonFile(listToSave, FILE_NAME);
 
