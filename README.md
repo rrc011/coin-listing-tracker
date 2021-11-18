@@ -42,18 +42,18 @@ npm run start
 1. First, create a new app on heroku
 2. Add the environment variables that were declared in the index file in the heroku app
 3. Then add next buildpacks
-4. `https://github.com/mxschmitt/heroku-playwright-buildpack.git`
-5. `heroku/nodejs`
-6. In the local project install package `npm i heroku -g`
-7. Run command `heroku login` and insert your credentials
-8. Run the next commands
-9. `git init`
-10. `git add .`
-11. `git commit -am "first commit"`
-12. `git push heroku master`
-13. Then you must install the following add-on in your heroku app
-14. `Heroku Scheduler `
-15. Finally configures the job with next the command `node bin/index.js`
+ 3. `https://github.com/mxschmitt/heroku-playwright-buildpack.git`
+ 3. `heroku/nodejs`
+4. In the local project install package `npm i heroku -g`
+5. Run command `heroku login` and insert your credentials
+6. Run the next commands
+ 6. `git init`
+ 6. `git add .`
+ 6. `git commit -am "first commit"`
+ 6. `git push heroku master`
+7. Then you must install the following add-on in your heroku app
+ 7. `Heroku Scheduler `
+8. Finally configures the job with next the command `node bin/index.js`
 
 ## Author
 
