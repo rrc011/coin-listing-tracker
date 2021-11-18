@@ -7,7 +7,7 @@ const URL = "https://www.binance.com/en/support/announcement/c-48?navId=48";
 
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASS = process.env.MAIL_PASS;
-const MONGO_CONNECTION_STRING = MONGO_CONNECTION_STRING;
+const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
 
 //function to return new item from two arrays
 const getNewItem = (array1, array2) => {
