@@ -28,12 +28,15 @@ const getJsonFile = async (fileName) => {
   const path = require("path");
   const filePath = path.join(__dirname, fileName);
   console.log(filePath);
-  if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, "utf8");
-    return JSON.parse(data);
-  } else {
-    return [];
-  }
+  console.log("Exist File: " + fs.existsSync(filePath));
+  const data = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(data);
+  // if (fs.existsSync(filePath)) {
+  //   const data = fs.readFileSync(filePath, "utf8");
+  //   return JSON.parse(data);
+  // } else {
+  //   return [];
+  // }
 };
 
 //function to return new item from two arrays
